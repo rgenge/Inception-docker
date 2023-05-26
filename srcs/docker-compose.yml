@@ -1,0 +1,68 @@
+version: "3"
+
+services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    depends_on:
+      - wordpress
+    restart: always
+    ports:
+      - 443:443
+    volumes:
+      - v-wordpress:/var/www/acosta-a/wordpress
+    networks:
+      - inception
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    depends_on:
+     - mariadb
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MYSQL_HOSTNAME=${MYSQL_HOSTNAME}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - v-wordpress:/var/www/acosta-a/wordpress
+    networks:
+      - inception
+
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - inception
+    volumes:
+      - v-mariadb:/var/lib/mysql
+
+volumes:
+  v-mariadb: 
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/acosta-a/data/mariadb
+      o: bind
+  v-wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/acosta-a/data/wordpress
+      o: bind
+
+networks:
+  inception:
+    driver: bridge
+
