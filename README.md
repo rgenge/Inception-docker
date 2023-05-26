@@ -11,7 +11,7 @@ This project is about Docker and Docker Compose, where we will generate 3 contai
 - run `make`
 - run `make down` to stop the containers.
 - run `make clean` to stop the containers and clean images and clean volumes.
-- - run `make fclean` to do a clean and then delete every folder created for wordpress and database, everything will be deleted and back to "zero".
+- run `make fclean` to do a clean and then delete every folder created for wordpress and database, everything will be deleted and back to "zero".
 
 ## About this project
 In this project we will setup 3 containers using the configurations below.
